@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario — Interferencia en Películas Delgadas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header>
+    <h1>Manual de Usuario</h1>
+    <h2>Interferencia en Películas Delgadas — Ondas de Luz</h2>
+    <p class="info-autor">Josue Arturo Reynoso Molina — Carné 202307813 — Universidad de San Carlos de Guatemala</p>
+</header>
+
+<!-- ============================================================ -->
+<!-- NAVEGACIÓN (pestañas) -->
+<!-- ============================================================ -->
+<nav class="tabs">
+    <button class="tab-btn active" data-tab="caratula">1. Carátula</button>
+    <button class="tab-btn" data-tab="intro">2. Introducción</button>
+    <button class="tab-btn" data-tab="software">3. Software</button>
+    <button class="tab-btn" data-tab="problema">4. Problema</button>
+    <button class="tab-btn" data-tab="formulas">5. Fórmulas</button>
+    <button class="tab-btn" data-tab="manual">6. ★ Resolución Manual</button>
+    <button class="tab-btn" data-tab="keil">7. Keil µVision</button>
+    <button class="tab-btn" data-tab="estructura">8. Estructura</button>
+    <button class="tab-btn" data-tab="modo-uso">9. Modo de uso</button>
+    <button class="tab-btn" data-tab="buffer">10. ★ Buffer</button>
+    <button class="tab-btn" data-tab="diagrama">11. Diagrama</button>
+    <button class="tab-btn" data-tab="hex">12. Hexadecimal</button>
+</nav>
+
+<main>
+
+<!-- ============================================================ -->
+<!-- TAB 1: CARÁTULA -->
+<!-- ============================================================ -->
+<section class="tab-content active" id="caratula">
+    <div class="caratula-top">
+        <h1>Universidad de San Carlos de Guatemala</h1>
+        <h2>Facultad de Ingeniería — Escuela de Ingeniería Mecánica Eléctrica</h2>
+    </div>
+
+    <div class="caratula-content">
+        <h1>Manual de Usuario</h1>
+        <h2>Interferencia en Películas Delgadas</h2>
+        <p class="subtitulo">Ondas de Luz</p>
+
+        <hr class="separador">
+
+        <div class="info-tabla">
+            <div class="info-row"><strong>Autor:</strong><span>Josue Arturo Reynoso Molina</span></div>
+            <div class="info-row"><strong>Carné:</strong><span>202307813</span></div>
+            <div class="info-row"><strong>Curso:</strong><span>Electrónica 5 — Segundo Parcial</span></div>
+            <div class="info-row"><strong>Ciclo:</strong><span>2026</span></div>
+        </div>
+
+        <p class="footer-caratula">Guatemala, 2026</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 2: INTRODUCCIÓN -->
+<!-- ============================================================ -->
+<section class="tab-content" id="intro">
+    <h2>Introducción</h2>
+    <p>El fenómeno de interferencia en películas delgadas ocurre cuando las ondas de luz se reflejan parcialmente en la superficie superior y en la inferior de una capa transparente cuyo espesor es comparable a la longitud de onda de la luz incidente.</p>
+
+    <p>Cuando la luz blanca (que contiene todas las longitudes de onda del espectro visible) incide sobre la película, algunas longitudes de onda interfieren constructivamente y se refuerzan, mientras que otras interfieren destructivamente y se cancelan. Esto produce que la película adquiera un color característico según su espesor y su índice de refracción.</p>
+
+    <p>Este manual describe el uso del programa implementado en lenguaje ensamblador ARM sobre el microcontrolador <strong>TM4C123GH6PM</strong> y simulado en <strong>Keil µVision</strong>.</p>
+
+    <p>El programa resuelve el siguiente enunciado:</p>
+
+    <blockquote>
+        «Una película de agua (n = 1.33) en aire tiene 320 nm de espesor.<br>
+        ¿De qué color se verá la luz reflejada?»
+    </blockquote>
+
+    <p>La salida del programa se almacena en la dirección de memoria <code>0x20000000</code> en formato hexadecimal. Este manual permite ver, byte por byte, cómo se traduce esa información a texto ASCII legible.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 3: SOFTWARE -->
+<!-- ============================================================ -->
+<section class="tab-content" id="software">
+    <h2>Software utilizado</h2>
+    <p>El programa utilizado es <strong>Keil µVision</strong>, una herramienta destinada a la programación en lenguaje ensamblador ARM.</p>
+
+    <p>El proyecto desarrollado está basado en este entorno y permite realizar el análisis de interferencia en películas delgadas mediante instrucciones ensambladas.</p>
+
+    <p>Para ejecutar correctamente el programa, es necesario tener Keil µVision instalado en el ordenador.</p>
+
+    <div class="marco-imagen">
+        <img src="imagenes/keil_logo.png" alt="Logo Keil µVision"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_logo.png</small></div>
+        <p class="caption">Figura: Logo de Keil µVision 5</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 4: PROBLEMA -->
+<!-- ============================================================ -->
+<section class="tab-content" id="problema">
+    <h2>Descripción del problema</h2>
+    <p>Una película delgada de agua (n = 1.33) de 320 nm de espesor se encuentra suspendida en aire. Al incidir luz blanca sobre ella, las ondas reflejadas en las superficies superior e inferior interfieren entre sí.</p>
+
+    <p>La reflexión en la interfaz <strong>aire → agua</strong> sufre un cambio de fase de π radianes, mientras que la reflexión en <strong>agua → aire</strong> no sufre cambio. Esta asimetría invierte la condición de interferencia constructiva.</p>
+
+    <h3>Pasos de resolución (software y manual):</h3>
+    <ol class="pasos">
+        <li>Identificar los datos: n = 1.33, t = 320 nm.</li>
+        <li>Aplicar la condición de interferencia constructiva: 2·n·t = (m + 0.5)·λ.</li>
+        <li>Despejar λ: λ = 2·n·t / (m + 0.5).</li>
+        <li>Calcular λ para cada orden m = 0, 1, 2, 3.</li>
+        <li>Comparar λ con el espectro visible (380-750 nm) y determinar el color.</li>
+    </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 5: FÓRMULAS -->
+<!-- ============================================================ -->
+<section class="tab-content" id="formulas">
+    <h2>Fórmulas a utilizar</h2>
+
+    <p>La interferencia en películas delgadas se rige por la diferencia de camino óptico entre las ondas reflejadas y el desfase por reflexión. Como solo una de las reflexiones invierte la fase (π rad), la condición de interferencia constructiva es:</p>
+
+    <div class="formula-box">
+        <div class="formula-titulo">Condición de interferencia constructiva:</div>
+        <div class="formula">2 · n · t = (m + 0.5) · λ</div>
+    </div>
+
+    <div class="formula-box">
+        <div class="formula-titulo">Longitud de onda despejada:</div>
+        <div class="formula">λ = (2 · n · t) / (m + 0.5)</div>
+    </div>
+
+    <div class="formula-box">
+        <div class="formula-titulo">Numerador constante:</div>
+        <div class="formula">2 · 1.33 · 320 = 851.2 nm</div>
+    </div>
+
+    <div class="formula-box">
+        <div class="formula-titulo">Espectro visible:</div>
+        <div class="formula">380 nm ≤ λ ≤ 750 nm</div>
+    </div>
+
+    <h3>🎨 Longitudes de onda por color (Espectro visible)</h3>
+    <p>La luz blanca contiene todas las longitudes de onda del espectro visible. Cada color corresponde a un rango específico de λ:</p>
+
+    <table class="tabla-colores">
+        <thead>
+            <tr><th>Color</th><th>Rango (nm)</th><th>Frecuencia (THz)</th><th>Muestra</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Violeta</td><td>380 – 450</td><td>668 – 789</td><td class="muestra" style="background:#7a3a9a;"></td></tr>
+            <tr><td>Azul</td><td>450 – 495</td><td>606 – 668</td><td class="muestra" style="background:#2050a0;"></td></tr>
+            <tr class="destacado"><td><strong>Verde</strong></td><td><strong>495 – 570</strong></td><td>526 – 606</td><td class="muestra" style="background:#22aa44;"></td></tr>
+            <tr><td>Amarillo</td><td>570 – 590</td><td>508 – 526</td><td class="muestra" style="background:#e8d800;"></td></tr>
+            <tr><td>Naranja</td><td>590 – 620</td><td>484 – 508</td><td class="muestra" style="background:#e88020;"></td></tr>
+            <tr><td>Rojo</td><td>620 – 750</td><td>400 – 484</td><td class="muestra" style="background:#cc2020;"></td></tr>
+        </tbody>
+    </table>
+
+    <div class="mensaje-verde">
+        ✅ Nuestro resultado: λ = 567.47 nm → cae dentro del rango 495–570 nm → <strong>COLOR VERDE</strong>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 6: RESOLUCIÓN MANUAL -->
+<!-- ============================================================ -->
+<section class="tab-content" id="manual">
+    <h2>Resolución Manual del Problema</h2>
+    <p class="cita">«Una película de agua (n = 1.33) en aire tiene 320 nm de espesor. ¿De qué color se verá la luz reflejada?»</p>
+
+    <h3>Paso 1 — Identificar los datos del problema</h3>
+    <div class="seccion-card">
+        <pre>De la lectura del enunciado extraemos:
+
+    n = 1.33   (índice de refracción del agua)
+    t = 320 nm (espesor de la película)
+    m = 0, 1, 2, 3   (posibles órdenes de interferencia)
+
+El espectro visible humano va desde 380 nm (violeta) hasta 750 nm (rojo).</pre>
+    </div>
+
+    <h3>Paso 2 — Plantear la condición física</h3>
+    <div class="seccion-card">
+        <pre>Cuando la luz incide sobre la película se producen dos reflexiones:
+
+    • Reflexión aire → agua (n₁ < n₂): cambio de fase de π rad.
+    • Reflexión agua → aire (n₁ > n₂): sin cambio de fase.
+
+Como solo una de las ondas sufre inversión, la condición de
+interferencia constructiva es:
+
+        2 · n · t = (m + 0.5) · λ
+
+El término 0.5 (= ½) aparece precisamente por el desfase de π rad.</pre>
+    </div>
+
+    <h3>Paso 3 — Despejar la longitud de onda λ</h3>
+    <div class="seccion-card">
+        <pre>Despejando λ de la ecuación anterior:
+
+        λ = (2 · n · t) / (m + 0.5)
+
+Sustituyendo los datos:
+
+        2 · n · t = 2 · 1.33 · 320
+                  = 2.66 · 320
+                  = 851.2 nm</pre>
+    </div>
+
+    <h3>Paso 4 — Calcular λ para cada orden m</h3>
+    <p>Con el numerador constante 851.2 nm, se evalúa la fórmula para cada valor de m:</p>
+
+    <table class="tabla-resultados">
+        <thead>
+            <tr>
+                <th>m</th>
+                <th>Denominador (m + 0.5)</th>
+                <th>Operación</th>
+                <th>λ (nm)</th>
+                <th>¿Visible? (380-750 nm)</th>
+                <th>Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>0.5</td><td>851.2 / 0.5</td><td>1702.40</td><td>❌ NO (infrarrojo)</td><td>—</td></tr>
+            <tr class="destacado"><td>1</td><td>1.5</td><td>851.2 / 1.5</td><td>567.47</td><td>✅ SÍ</td><td><strong>Verde</strong></td></tr>
+            <tr><td>2</td><td>2.5</td><td>851.2 / 2.5</td><td>340.48</td><td>❌ NO (ultravioleta)</td><td>—</td></tr>
+            <tr><td>3</td><td>3.5</td><td>851.2 / 3.5</td><td>243.20</td><td>❌ NO (ultravioleta)</td><td>—</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Paso 5 — Analizar los resultados</h3>
+    <div class="seccion-card">
+        <pre>De la tabla anterior observamos:
+
+    • m = 0  →  λ = 1702.40 nm  →  Infrarrojo (invisible)
+    • m = 1  →  λ = 567.47 nm   →  ✅ VERDE (visible)
+    • m = 2  →  λ = 340.48 nm   →  Ultravioleta (invisible)
+    • m = 3  →  λ = 243.20 nm   →  Ultravioleta (invisible)
+
+Solamente el orden m = 1 cae dentro del espectro visible humano.
+Y dentro del espectro visible, 567.47 nm corresponde al color verde.</pre>
+    </div>
+
+    <h3>🎨 Rangos del espectro visible (para verificar el color)</h3>
+    <table class="tabla-colores">
+        <thead>
+            <tr><th>Color</th><th>Rango (nm)</th><th>Frecuencia (THz)</th><th>Muestra</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Violeta</td><td>380 – 450</td><td>668 – 789</td><td class="muestra" style="background:#7a3a9a;"></td></tr>
+            <tr><td>Azul</td><td>450 – 495</td><td>606 – 668</td><td class="muestra" style="background:#2050a0;"></td></tr>
+            <tr class="destacado"><td><strong>Verde</strong></td><td><strong>495 – 570</strong></td><td>526 – 606</td><td class="muestra" style="background:#22aa44;"></td></tr>
+            <tr><td>Amarillo</td><td>570 – 590</td><td>508 – 526</td><td class="muestra" style="background:#e8d800;"></td></tr>
+            <tr><td>Naranja</td><td>590 – 620</td><td>484 – 508</td><td class="muestra" style="background:#e88020;"></td></tr>
+            <tr><td>Rojo</td><td>620 – 750</td><td>400 – 484</td><td class="muestra" style="background:#cc2020;"></td></tr>
+        </tbody>
+    </table>
+
+    <div class="mensaje-verde">
+        ✅ VERIFICACIÓN: λ = 567.47 nm → está en 495–570 nm → <strong>COLOR VERDE</strong>
+    </div>
+
+    <div class="resultado-final">
+        <h3>✅ RESULTADO FINAL</h3>
+        <h2>La película de agua se verá de COLOR VERDE</h2>
+        <p>porque λ = 567.47 nm, calculada para el orden m = 1, es la única longitud de onda que cae dentro del espectro visible (380 nm – 750 nm).</p>
+    </div>
+
+    <h3>Verificación cruzada con el programa en ensamblador</h3>
+    <div class="seccion-card">
+        <pre>El mismo cálculo se implementó en lenguaje ensamblador ARM
+para el TM4C123GH6PM. El programa realizó exactamente las
+mismas operaciones, pero usando aritmética de punto fijo
+(multiplicando por 100 para evitar decimales):
+
+        λ×100 = 8512000 / (100·m + 50)
+
+Los resultados del programa coinciden con los cálculos manuales:
+
+    m = 0  →  programa: 170240/100 = 1702.40 nm  →  ✓ coincide
+    m = 1  →  programa:  56747/100 =  567.47 nm  →  ✓ coincide
+    m = 2  →  programa:  34048/100 =  340.48 nm  →  ✓ coincide
+    m = 3  →  programa:  24320/100 =  243.20 nm  →  ✓ coincide
+
+La salida del programa se almacenó en la dirección 0x20000000
+y se puede verificar en la pestaña 'Buffer interactivo'.</pre>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 7: KEIL -->
+<!-- ============================================================ -->
+<section class="tab-content" id="keil">
+    <h2>Cómo usar Keil µVision</h2>
+
+    <h3>Antes de comenzar:</h3>
+    <ul>
+        <li>Tener instalado Keil µVision 5</li>
+        <li>Buscar el icono en el ordenador</li>
+        <li>Dar doble clic</li>
+        <li>Se abrirá la ventana principal</li>
+    </ul>
+
+    <div class="marco-imagen">
+        <img src="imagenes/keil_ventana_principal.png" alt="Ventana principal" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_ventana_principal.png</small></div>
+        <p class="caption">Figura: Ventana principal de Keil µVision</p>
+    </div>
+
+    <h3>Cómo abrir el proyecto:</h3>
+    <ul>
+        <li>Después de abrir Keil µVision 5</li>
+        <li>Ir a la pestaña Project y dar clic en Open Project</li>
+        <li>Se abrirá la ventana donde están ubicados los proyectos</li>
+        <li>Seleccionar el que se desea y dar clic en Abrir</li>
+    </ul>
+
+    <div class="marco-imagen">
+        <img src="imagenes/keil_open_project_menu.png" alt="Menú Project" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_open_project_menu.png</small></div>
+        <p class="caption">Figura: Pestaña Project → Open Project</p>
+    </div>
+
+    <div class="marco-imagen">
+        <img src="imagenes/keil_open_project_dialog.png" alt="Diálogo" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_open_project_dialog.png</small></div>
+        <p class="caption">Figura: Ventana para seleccionar el proyecto</p>
+    </div>
+
+    <div class="marco-imagen">
+        <img src="imagenes/keil_project_files.png" alt="Proyectos" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_project_files.png</small></div>
+        <p class="caption">Figura: Ventana con los proyectos ubicados</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 8: ESTRUCTURA -->
+<!-- ============================================================ -->
+<section class="tab-content" id="estructura">
+    <h2>Estructura del programa</h2>
+
+    <h3>1. Definición de área de trabajo y alineación</h3>
+    <p>Se definió un área de datos y una de trabajo con directivas AREA, CODE, READONLY y ALIGN para garantizar la correcta organización de la memoria.</p>
+
+    <div class="marco-imagen">
+        <img src="imagenes/estructura_datos.png" alt="Áreas" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/estructura_datos.png</small></div>
+        <p class="caption">Figura: Definición de áreas de trabajo y alineación</p>
+    </div>
+
+    <h3>2. Asignación de los datos a los arreglos</h3>
+    <p>Los datos de entrada del problema se asignan directamente a registros o a posiciones de memoria conocidas antes de iniciar el programa principal.</p>
+
+    <div class="marco-imagen">
+        <img src="imagenes/datos_arreglos.png" alt="Datos" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/datos_arreglos.png</small></div>
+        <p class="caption">Figura: Asignación de datos a los arreglos</p>
+    </div>
+
+    <h3>3. Estructura de las funciones utilizadas</h3>
+    <p>El programa está modularizado en subrutinas que cumplen funciones específicas: cálculo de λ, verificación de visibilidad, asignación de color, formateo de números y escritura en memoria.</p>
+
+    <div class="marco-imagen">
+        <img src="imagenes/estructura_funciones.png" alt="Funciones" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/estructura_funciones.png</small></div>
+        <p class="caption">Figura: Estructura de las funciones utilizadas</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 9: MODO DE USO -->
+<!-- ============================================================ -->
+<section class="tab-content" id="modo-uso">
+    <h2>Modo de uso</h2>
+
+    <h3>1. Antes de iniciar el programa, definir los datos de entrada</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/datos_arreglos.png" alt="Datos" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/datos_arreglos.png</small></div>
+        <p class="caption">Figura: Datos iniciales del programa</p>
+    </div>
+
+    <h3>2. Pulsar Build (F7) para compilar el programa</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_build_boton.png" alt="Build" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_build_boton.png</small></div>
+        <p class="caption">Figura: Botón Build (F7)</p>
+    </div>
+
+    <h3>3. Pulsar Options for Target</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_options_target.png" alt="Options" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_options_target.png</small></div>
+        <p class="caption">Figura: Botón Options for Target</p>
+    </div>
+
+    <h3>4. En la sección Debug, activar el uso del simulador</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_debug_simulator.png" alt="Debug" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_debug_simulator.png</small></div>
+        <p class="caption">Figura: Debug → Use Simulator</p>
+    </div>
+
+    <h3>5. Dar clic en Start/Stop Debug Session para iniciar</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_start_debug_boton.png" alt="Start" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_start_debug_boton.png</small></div>
+        <p class="caption">Figura: Botón Start/Stop Debug Session (Ctrl+F5)</p>
+    </div>
+
+    <h3>6. En la parte izquierda se abrirá la ventana de registros. Desplegar FPU → Float.</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_registers_fpu.png" alt="Registros" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_registers_fpu.png</small></div>
+        <p class="caption">Figura: Ventana de Registros (FPU → Float)</p>
+    </div>
+
+    <h3>7. Dar clic en Run (F5) para correr el código por completo</h3>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_run_boton.png" alt="Run" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_run_boton.png</small></div>
+        <p class="caption">Figura: Botón Run (F5)</p>
+    </div>
+
+    <h3>8. Ver la Memory 1 en 0x20000000</h3>
+    <p>Allí aparecerán los datos en hexadecimal (0x3D, 0x3D, 0x20, ...) junto con su interpretación ASCII.</p>
+    <div class="marco-imagen">
+        <img src="imagenes/keil_memory_1.png" alt="Memory" onerror="mostrarPlaceholder(this)">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/keil_memory_1.png</small></div>
+        <p class="caption">Figura: Ventana Memory 1 en 0x20000000</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 10: BUFFER INTERACTIVO -->
+<!-- ============================================================ -->
+<section class="tab-content" id="buffer">
+    <div class="buffer-header">
+        <h2>Buffer de memoria en 0x20000000</h2>
+        <span id="estado-buffer" class="estado-buffer">0 / 0 revelados</span>
+    </div>
+
+    <p class="instruccion-buffer">Haz clic en cada byte para ver su conversión a ASCII.</p>
+
+    <div class="controles-buffer">
+        <button id="btn-revelar-todo" class="btn-accion">🔍 Revelar todo</button>
+        <button id="btn-reiniciar" class="btn-accion btn-gris">🔄 Reiniciar</button>
+    </div>
+
+    <div id="grid-buffer" class="grid-buffer"></div>
+
+    <h3>Texto revelado:</h3>
+    <pre id="texto-revelado" class="texto-revelado"></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 11: DIAGRAMA -->
+<!-- ============================================================ -->
+<section class="tab-content" id="diagrama">
+    <h2>Diagrama de flujo del programa</h2>
+    <p>A continuación se muestra la lógica del programa de análisis de interferencia en películas delgadas:</p>
+
+    <div class="marco-imagen">
+        <img src="imagenes/diagrama_flujo.png" alt="Diagrama" onerror="mostrarPlaceholder(this)" style="max-width:500px;">
+        <div class="placeholder" style="display:none;">📷 ESPACIO PARA IMAGEN<br><small>imagenes/diagrama_flujo.png</small></div>
+        <p class="caption">Figura: Diagrama de flujo del programa</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 12: HEXADECIMAL -->
+<!-- ============================================================ -->
+<section class="tab-content" id="hex">
+    <h2>¿Por qué las respuestas están en hexadecimal?</h2>
+
+    <div class="razon-card">
+        <h3>1. 1 byte = 2 dígitos hexadecimales</h3>
+        <p>Cada byte (8 bits) se representa exactamente con dos caracteres hexadecimales. Ejemplo: 'A' en ASCII es 0x41 = 65 decimal.</p>
+    </div>
+
+    <div class="razon-card">
+        <h3>2. Alineación natural de memoria</h3>
+        <p>Las direcciones de memoria son múltiplos de 4 u 8 bytes. El hexadecimal refleja directamente esta estructura.</p>
+    </div>
+
+    <div class="razon-card">
+        <h3>3. Correspondencia directa con ASCII</h3>
+        <p>Cada par hexadecimal se traduce inmediatamente al carácter ASCII: 0x41 = 'A', 0x20 = espacio, 0x0D = CR, 0x0A = LF.</p>
+    </div>
+
+    <div class="razon-card">
+        <h3>4. Depuración precisa</h3>
+        <p>Si un programa falla, se puede identificar exactamente qué byte está mal, algo imposible con una vista puramente textual.</p>
+    </div>
+
+    <div class="razon-card">
+        <h3>5. Estándar en sistemas embebidos</h3>
+        <p>Es el formato universal en ingeniería de software embebido para inspeccionar el contenido de memoria.</p>
+    </div>
+
+    <h2 style="margin-top: 40px;">❓ Preguntas frecuentes</h2>
+
+    <div class="pregunta-card">
+        <h3>❓ ¿Cómo sabes que 567.47 nm corresponde al verde?</h3>
+        <p>Porque el espectro visible humano está dividido en rangos estándar: violeta (380–450), azul (450–495), verde (495–570), amarillo (570–590), naranja (590–620) y rojo (620–750 nm). Nuestro resultado de 567.47 nm cae dentro del rango del verde.</p>
+    </div>
+
+    <div class="pregunta-card">
+        <h3>❓ ¿Por qué 567.47 nm y no 567.46 nm como sale en el programa?</h3>
+        <p>Porque el programa usa punto fijo multiplicado por 100, lo que introduce un pequeño error de truncamiento. La diferencia de 0.01 nm es despreciable y no cambia el resultado (sigue siendo verde).</p>
+    </div>
+
+    <div class="pregunta-card">
+        <h3>❓ ¿Por qué el rango del verde es tan amplio (495–570 nm)?</h3>
+        <p>Porque el ojo humano tiene conos que responden a diferentes longitudes de onda, y el verde cubre una región amplia porque es el color al que más sensibles somos (visión fotópica).</p>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <p><strong>Josue Arturo Reynoso Molina</strong> — Carné 202307813</p>
+    <p>Universidad de San Carlos de Guatemala — Facultad de Ingeniería</p>
+    <p>Electrónica 5 — Segundo Parcial — 2026</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
